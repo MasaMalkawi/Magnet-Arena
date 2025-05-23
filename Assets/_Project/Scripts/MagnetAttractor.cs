@@ -1,19 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class MagnetAttractor : MonoBehaviour
 {
     public float attractionForce = 10f;
-    public float collectDistance = 1.5f; 
+    private float originalAttractionForce;
+    public float collectDistance = 1.5f;
+
     private List<Rigidbody> objectsInRange = new List<Rigidbody>();
     private ScoreManager scoreManager;
 
+    // Boost UI
+    public TextMeshProUGUI boostText;
+    private float boostTimeRemaining = 0f;
+    private bool boostActive = false;
+
     void Start()
     {
+        originalAttractionForce = attractionForce;
         scoreManager = FindObjectOfType<ScoreManager>();
+
         if (scoreManager == null)
+            Debug.LogError("ScoreManager not found!");
+
+        if (boostText != null)
+            boostText.text = "Boost: Inactive";
+    }
+
+    void Update()
+    {
+        if (boostActive && boostTimeRemaining > 0)
         {
-            Debug.LogError("ScoreManager not found in the scene!");
+            boostTimeRemaining -= Time.deltaTime;
+            if (boostText != null)
+                boostText.text = "Boost: " + Mathf.CeilToInt(boostTimeRemaining) + "s";
+        }
+        else if (boostActive && boostTimeRemaining <= 0)
+        {
+            attractionForce = originalAttractionForce;
+            boostActive = false;
+            if (boostText != null)
+                boostText.text = "Boost: Inactive";
         }
     }
 
@@ -23,10 +51,7 @@ public class MagnetAttractor : MonoBehaviour
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
             if (rb != null && !objectsInRange.Contains(rb))
-            {
                 objectsInRange.Add(rb);
-                Debug.Log("Object entered magnetic field: " + rb.name);
-            }
         }
     }
 
@@ -36,10 +61,7 @@ public class MagnetAttractor : MonoBehaviour
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
             if (rb != null && objectsInRange.Contains(rb))
-            {
                 objectsInRange.Remove(rb);
-                Debug.Log("Object exited magnetic field: " + rb.name);
-            }
         }
     }
 
@@ -56,15 +78,25 @@ public class MagnetAttractor : MonoBehaviour
                 float distance = Vector3.Distance(transform.position, rb.position);
                 if (distance < collectDistance)
                 {
-                    Debug.Log("Collecting object: " + rb.name);
                     objectsInRange.RemoveAt(i);
                     Destroy(rb.gameObject);
+
                     if (scoreManager != null)
-                    {
                         scoreManager.AddScore(1);
-                    }
                 }
             }
         }
+    }
+
+    // Call this from PowerUp
+    public void BoostMagnetForce(float multiplier, float duration)
+    {
+        StopAllCoroutines(); // optional safeguard
+        attractionForce = originalAttractionForce * multiplier;
+        boostTimeRemaining = duration;
+        boostActive = true;
+
+        if (boostText != null)
+            boostText.text = "Boost: " + Mathf.CeilToInt(boostTimeRemaining) + "s";
     }
 }
