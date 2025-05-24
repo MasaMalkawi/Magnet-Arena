@@ -15,7 +15,7 @@ public class MagnetSpawner : MonoBehaviour
 
     public void RespawnObjects()
     {
-        // حذف القديم
+        
         if (spawnedObjects != null)
         {
             foreach (var obj in spawnedObjects)
@@ -24,7 +24,7 @@ public class MagnetSpawner : MonoBehaviour
             }
         }
 
-        // توليد جديد
+        
         spawnedObjects = new GameObject[amountToSpawn];
         for (int i = 0; i < amountToSpawn; i++)
         {

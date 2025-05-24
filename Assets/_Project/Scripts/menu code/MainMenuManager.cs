@@ -5,10 +5,14 @@ using Photon.Realtime;
 
 public class MainMenuManager : MonoBehaviourPunCallbacks
 {
-    public Button playButton; // الزر من الواجهة
+    public Button playButton;
 
     private bool isConnecting = false;
 
+    private void Start()
+    {
+        ConnectToServer();
+    }
     public void ConnectToServer()
     {
         if (PhotonNetwork.IsConnected || isConnecting)
@@ -27,19 +31,18 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("✅ Connected to Photon Master Server.");
-        PhotonNetwork.JoinLobby(); // يتم استدعاؤها مرة واحدة فقط بعد التأكد من الاتصال
+        PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
     {
         Debug.Log("✅ Joined Lobby. Joining random room...");
-        PhotonNetwork.JoinRandomRoom();
+        playButton.interactable = true;
     }
 
-    public override void OnJoinRandomFailed(short returnCode, string message)
+    public void BUTTON_Play()
     {
-        Debug.Log("❌ No available rooms, creating one...");
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 4 });
+        PhotonNetwork.JoinRandomOrCreateRoom();
     }
 
     public override void OnJoinedRoom()
