@@ -7,6 +7,7 @@ TagManager:
   - CinemachineTarget
   - PowerUp
   - MagnetObject
+  - Bullet
   layers:
   - Default
   - TransparentFX
