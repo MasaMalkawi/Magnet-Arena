@@ -4,8 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - MagnetObject
+  - CinemachineTarget
   - PowerUp
+  - MagnetObject
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - FirstPersonOverlay
   - 
   - 
   - 
