@@ -2,9 +2,7 @@
 
 namespace Starter
 {
-	/// <summary>
-	/// Simple component that rotates object. Used for Coins.
-	/// </summary>
+	
 	public class RotateObject : MonoBehaviour
 	{
 		public float Speed = 90f;
