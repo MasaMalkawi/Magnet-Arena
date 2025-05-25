@@ -16,10 +16,18 @@ public class MagnetAttractor : MonoBehaviour
     private float boostTimeRemaining = 0f;
     private bool boostActive = false;
 
+    // Sound
+    public AudioClip tickSound;           // اسحبي صوت التكة هنا من Inspector
+    private AudioSource audioSource;
+
     void Start()
     {
         originalAttractionForce = attractionForce;
-        scoreManager = FindObjectOfType<ScoreManager>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
 
         if (scoreManager == null)
             Debug.LogError("ScoreManager not found!");
@@ -83,15 +91,23 @@ public class MagnetAttractor : MonoBehaviour
 
                     if (scoreManager != null)
                         scoreManager.AddScore(1);
+
+                    PlayTickSound(); // شغّل الصوت
                 }
             }
         }
     }
 
+    void PlayTickSound()
+    {
+        if (tickSound != null && audioSource != null)
+            audioSource.PlayOneShot(tickSound);
+    }
+
     // Call this from PowerUp
     public void BoostMagnetForce(float multiplier, float duration)
     {
-        StopAllCoroutines(); // optional safeguard
+        StopAllCoroutines(); // safeguard
         attractionForce = originalAttractionForce * multiplier;
         boostTimeRemaining = duration;
         boostActive = true;

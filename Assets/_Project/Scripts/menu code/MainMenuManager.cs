@@ -30,13 +30,13 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Debug.Log("✅ Connected to Photon Master Server.");
+        Debug.Log("Connected to Photon Master Server.");
         PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
     {
-        Debug.Log("✅ Joined Lobby. Joining random room...");
+        Debug.Log("Joined Lobby. Joining random room...");
         playButton.interactable = true;
     }
 
@@ -47,7 +47,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        Debug.Log("✅ Joined Room! Loading GameScene...");
+        Debug.Log("Joined Room! Loading GameScene...");
         PhotonNetwork.LoadLevel("GameScene");
     }
 }

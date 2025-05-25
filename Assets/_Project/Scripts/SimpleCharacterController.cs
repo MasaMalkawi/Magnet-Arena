@@ -32,7 +32,7 @@ public class SimpleCharacterController : MonoBehaviour
 
         if (controller.isGrounded)
         {
-            verticalSpeed = -1f; // لابقاء الشخصية على الأرض
+            verticalSpeed = -1f;
 
             if (Input.GetButtonDown("Jump"))
                 verticalSpeed = jumpSpeed;
@@ -62,7 +62,7 @@ public class SimpleCharacterController : MonoBehaviour
 
         Vector3 desiredMoveDirection = (x * right + z * forward);
 
-        // لمنع تسريع الحركة عند التحرك قطريًا
+        
         if (desiredMoveDirection.magnitude > 1f)
             desiredMoveDirection.Normalize();
 
