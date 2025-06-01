@@ -8,11 +8,20 @@ public class GameTimer : MonoBehaviour
     public TextMeshProUGUI timerText;
 
     private bool isGameOver = false;
+    private Vector3 playerStartPosition;
+    private Quaternion playerStartRotation;
 
     void Start()
     {
         timer = matchDuration;
         UpdateTimerUI();
+
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            playerStartPosition = player.transform.position;
+            playerStartRotation = player.transform.rotation;
+        }
     }
 
     void Update()
@@ -56,28 +65,25 @@ public class GameTimer : MonoBehaviour
     {
         ResetTimer();
 
-        // Reset score
-        ScoreManager score = FindObjectOfType<ScoreManager>();
+        ScoreManager score = FindFirstObjectByType<ScoreManager>();
         if (score != null)
         {
             score.ResetScore();
         }
 
-        // Reset player position
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)
         {
-            player.transform.position = new Vector3(0f, 1f, 0f); // Adjust as needed
+            player.transform.SetPositionAndRotation(playerStartPosition, playerStartRotation);
             Rigidbody rb = player.GetComponent<Rigidbody>();
-            if (rb != null) rb.linearVelocity = Vector3.zero;
+            if (rb != null)
+                rb.linearVelocity = Vector3.zero;
         }
 
-        // Respawn magnet objects
-        MagnetSpawner spawner = FindObjectOfType<MagnetSpawner>();
+        MagnetSpawner spawner = FindFirstObjectByType<MagnetSpawner>();
         if (spawner != null)
         {
             spawner.RespawnObjects();
         }
     }
 }
-

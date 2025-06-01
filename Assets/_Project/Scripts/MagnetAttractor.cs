@@ -17,7 +17,7 @@ public class MagnetAttractor : MonoBehaviour
     private bool boostActive = false;
 
     // Sound
-    public AudioClip tickSound;           // اسحبي صوت التكة هنا من Inspector
+    public AudioClip tickSound;          
     private AudioSource audioSource;
 
     void Start()
@@ -92,7 +92,7 @@ public class MagnetAttractor : MonoBehaviour
                     if (scoreManager != null)
                         scoreManager.AddScore(1);
 
-                    PlayTickSound(); // شغّل الصوت
+                    PlayTickSound(); 
                 }
             }
         }

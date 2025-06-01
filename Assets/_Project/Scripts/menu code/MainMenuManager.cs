@@ -9,10 +9,12 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
     private bool isConnecting = false;
 
+
     private void Start()
     {
         ConnectToServer();
     }
+
     public void ConnectToServer()
     {
         if (PhotonNetwork.IsConnected || isConnecting)
@@ -24,6 +26,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         playButton.interactable = false;
         isConnecting = true;
 
+        PhotonNetwork.GameVersion = "1"; 
         Debug.Log("Connecting to Photon...");
         PhotonNetwork.ConnectUsingSettings();
     }
@@ -36,13 +39,23 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        Debug.Log("Joined Lobby. Joining random room...");
+        Debug.Log("Joined Lobby. Ready to play.");
         playButton.interactable = true;
     }
 
     public void BUTTON_Play()
     {
-        PhotonNetwork.JoinRandomOrCreateRoom();
+        Debug.Log("Attempting to join random room...");
+        PhotonNetwork.JoinRandomRoom();
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log("No room found, creating a new one...");
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = 4;
+
+        PhotonNetwork.CreateRoom(null, options);
     }
 
     public override void OnJoinedRoom()
@@ -50,4 +63,5 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         Debug.Log("Joined Room! Loading GameScene...");
         PhotonNetwork.LoadLevel("GameScene");
     }
+
 }
