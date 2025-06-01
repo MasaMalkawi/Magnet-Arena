@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using Photon.Pun; 
 
 [RequireComponent(typeof(CharacterController))]
-public class SimpleCharacterController : MonoBehaviour
+public class SimpleCharacterController : MonoBehaviourPun
 {
     public float moveSpeed = 5f;
     public float jumpSpeed = 8f;
@@ -16,14 +17,22 @@ public class SimpleCharacterController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
 
-        if (Camera.main != null)
-            cameraTransform = Camera.main.transform;
-        else
-            Debug.LogWarning("Main Camera not found! Please add a camera with the tag 'MainCamera'.");
+      
+        if (photonView.IsMine)
+        {
+            if (Camera.main != null)
+                cameraTransform = Camera.main.transform;
+            else
+                Debug.LogWarning("Main Camera not found! Please add a camera with the tag 'MainCamera'.");
+        }
     }
 
     private void Update()
     {
+       
+        if (!photonView.IsMine)
+            return;
+
         float deltaTime = Time.deltaTime;
 
         Vector3 moveInput = GetMovementInput();
@@ -62,7 +71,6 @@ public class SimpleCharacterController : MonoBehaviour
 
         Vector3 desiredMoveDirection = (x * right + z * forward);
 
-        
         if (desiredMoveDirection.magnitude > 1f)
             desiredMoveDirection.Normalize();
 
@@ -78,4 +86,3 @@ public class SimpleCharacterController : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 }
-
