@@ -1,12 +1,11 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Photon.Pun; 
 
 public class SceneController : MonoBehaviour
 {
-
-    public void LoadScene(string sceneName)
+    public void LoadScene(string SceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        PhotonNetwork.LoadLevel("GameScene"); 
     }
 
     public void QuitGame()
@@ -14,3 +13,4 @@ public class SceneController : MonoBehaviour
         Application.Quit();
     }
 }
+
