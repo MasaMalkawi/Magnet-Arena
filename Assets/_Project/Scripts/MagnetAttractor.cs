@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using Photon.Pun;
 
-public class MagnetAttractor : MonoBehaviour
+public class MagnetAttractor : MonoBehaviourPun
 {
     public float attractionForce = 10f;
     private float originalAttractionForce;
@@ -17,27 +18,28 @@ public class MagnetAttractor : MonoBehaviour
     private bool boostActive = false;
 
     // Sound
-    public AudioClip tickSound;          
+    public AudioClip tickSound;
     private AudioSource audioSource;
 
     void Start()
     {
         originalAttractionForce = attractionForce;
-        scoreManager = FindFirstObjectByType<ScoreManager>();
+        
+        if (photonView.IsMine)
+            scoreManager = GetComponentInChildren<ScoreManager>();
 
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
 
-        if (scoreManager == null)
-            Debug.LogError("ScoreManager not found!");
-
-        if (boostText != null)
+        if (photonView.IsMine && boostText != null)
             boostText.text = "Boost: Inactive";
     }
 
     void Update()
     {
+        if (!photonView.IsMine) return;
+
         if (boostActive && boostTimeRemaining > 0)
         {
             boostTimeRemaining -= Time.deltaTime;
@@ -55,6 +57,8 @@ public class MagnetAttractor : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (!photonView.IsMine) return;
+
         if (other.CompareTag("MagnetObject"))
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
@@ -65,6 +69,8 @@ public class MagnetAttractor : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+        if (!photonView.IsMine) return;
+
         if (other.CompareTag("MagnetObject"))
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
@@ -75,6 +81,8 @@ public class MagnetAttractor : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!photonView.IsMine) return;
+
         for (int i = objectsInRange.Count - 1; i >= 0; i--)
         {
             Rigidbody rb = objectsInRange[i];
@@ -87,12 +95,17 @@ public class MagnetAttractor : MonoBehaviour
                 if (distance < collectDistance)
                 {
                     objectsInRange.RemoveAt(i);
-                    Destroy(rb.gameObject);
+
+                    PhotonView objPhotonView = rb.GetComponent<PhotonView>();
+                    if (objPhotonView != null)
+                        PhotonNetwork.Destroy(objPhotonView.gameObject);
+                    else
+                        Destroy(rb.gameObject); // fallback
 
                     if (scoreManager != null)
                         scoreManager.AddScore(1);
 
-                    PlayTickSound(); 
+                    PlayTickSound();
                 }
             }
         }
@@ -100,6 +113,8 @@ public class MagnetAttractor : MonoBehaviour
 
     void PlayTickSound()
     {
+        if (!photonView.IsMine) return;
+
         if (tickSound != null && audioSource != null)
             audioSource.PlayOneShot(tickSound);
     }
@@ -107,6 +122,8 @@ public class MagnetAttractor : MonoBehaviour
     // Call this from PowerUp
     public void BoostMagnetForce(float multiplier, float duration)
     {
+        if (!photonView.IsMine) return;
+
         StopAllCoroutines(); // safeguard
         attractionForce = originalAttractionForce * multiplier;
         boostTimeRemaining = duration;
@@ -116,3 +133,4 @@ public class MagnetAttractor : MonoBehaviour
             boostText.text = "Boost: " + Mathf.CeilToInt(boostTimeRemaining) + "s";
     }
 }
+

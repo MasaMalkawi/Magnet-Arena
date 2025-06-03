@@ -1,13 +1,22 @@
+
 using UnityEngine;
 using TMPro;
+using Photon.Pun;
 
-public class ScoreManager : MonoBehaviour
+public class ScoreManager : MonoBehaviourPun
 {
     public int score = 0;
     public TextMeshProUGUI scoreText;
 
     void Start()
     {
+        
+        if (!photonView.IsMine)
+        {
+            enabled = false; 
+            return;
+        }
+
         UpdateScoreUI();
     }
 
@@ -29,3 +38,4 @@ public class ScoreManager : MonoBehaviour
             scoreText.text = "Score: " + score;
     }
 }
+
