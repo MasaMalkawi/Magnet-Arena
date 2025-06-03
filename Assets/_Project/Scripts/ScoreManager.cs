@@ -26,13 +26,14 @@ public class ScoreManager : MonoBehaviourPun
                 Debug.LogWarning("ScoreText component not assigned and not found in scene!");
         }
 
+
         UpdateScoreUI();
     }
 
     public void AddScore(int value)
     {
         score += value;
-        Debug.Log($"ScoreManager: Score added. New score = {score}");
+        
         UpdateScoreUI();
     }
 
@@ -47,7 +48,7 @@ public class ScoreManager : MonoBehaviourPun
         if (scoreText != null)
         {
             scoreText.text = "Score: " + score;
-            Debug.Log("ScoreManager: UI updated with score = " + score);
+            
         }
         else
         {

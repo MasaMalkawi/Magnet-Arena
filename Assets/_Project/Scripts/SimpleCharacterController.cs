@@ -85,9 +85,7 @@ public class SimpleCharacterController : MonoBehaviourPun
         Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
-}*/
-
-using UnityEngine;
+}*/using UnityEngine;
 using Photon.Pun;
 
 [RequireComponent(typeof(CharacterController))]
@@ -103,7 +101,7 @@ public class SimpleCharacterController : MonoBehaviourPun
     private Transform cameraTransform;
 
     [Header("References")]
-    public GameObject playerCamera; 
+    public GameObject playerCamera;
 
     private void Start()
     {
@@ -112,15 +110,16 @@ public class SimpleCharacterController : MonoBehaviourPun
         if (photonView.IsMine)
         {
             if (playerCamera != null)
+            {
                 playerCamera.SetActive(true);
+                Camera cam = playerCamera.GetComponent<Camera>();
+                if (cam != null)
+                    cameraTransform = cam.transform;
+            }
             else
+            {
                 Debug.LogWarning("Player camera is not assigned!");
-
-            
-            if (Camera.main != null)
-                cameraTransform = Camera.main.transform;
-            else
-                Debug.LogWarning("Main Camera not found! Please add a camera with the tag 'MainCamera'.");
+            }
         }
         else
         {
