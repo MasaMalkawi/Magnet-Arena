@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
@@ -10,11 +9,21 @@ public class ScoreManager : MonoBehaviourPun
 
     void Start()
     {
-        
         if (!photonView.IsMine)
         {
-            enabled = false; 
+            enabled = false;
             return;
+        }
+
+        if (scoreText == null)
+        {
+            
+            GameObject scoreObj = GameObject.Find("ScoreText");
+            if (scoreObj != null)
+                scoreText = scoreObj.GetComponent<TextMeshProUGUI>();
+
+            if (scoreText == null)
+                Debug.LogWarning("ScoreText component not assigned and not found in scene!");
         }
 
         UpdateScoreUI();
@@ -23,6 +32,7 @@ public class ScoreManager : MonoBehaviourPun
     public void AddScore(int value)
     {
         score += value;
+        Debug.Log($"ScoreManager: Score added. New score = {score}");
         UpdateScoreUI();
     }
 
@@ -35,7 +45,13 @@ public class ScoreManager : MonoBehaviourPun
     void UpdateScoreUI()
     {
         if (scoreText != null)
+        {
             scoreText.text = "Score: " + score;
+            Debug.Log("ScoreManager: UI updated with score = " + score);
+        }
+        else
+        {
+            Debug.LogWarning("ScoreManager: scoreText is null, cannot update UI");
+        }
     }
 }
-

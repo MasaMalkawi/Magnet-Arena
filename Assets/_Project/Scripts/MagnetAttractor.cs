@@ -24,9 +24,19 @@ public class MagnetAttractor : MonoBehaviourPun
     void Start()
     {
         originalAttractionForce = attractionForce;
-        
+
         if (photonView.IsMine)
+        {
+            
             scoreManager = GetComponentInChildren<ScoreManager>();
+            if (scoreManager == null)
+            {
+                scoreManager = GetComponentInParent<ScoreManager>();
+                if (scoreManager == null)
+                    Debug.LogWarning("MagnetAttractor: ScoreManager not found!");
+            }
+        }
+        
 
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
@@ -34,6 +44,15 @@ public class MagnetAttractor : MonoBehaviourPun
 
         if (photonView.IsMine && boostText != null)
             boostText.text = "Boost: Inactive";
+
+        if (scoreManager == null)
+        {
+            scoreManager = FindFirstObjectByType<ScoreManager>();
+            if (scoreManager == null)
+                Debug.LogWarning("MagnetAttractor: Still couldn't find ScoreManager in scene.");
+            else
+                Debug.Log("MagnetAttractor: ScoreManager found via FindObjectOfType.");
+        }
     }
 
     void Update()
@@ -100,10 +119,17 @@ public class MagnetAttractor : MonoBehaviourPun
                     if (objPhotonView != null)
                         PhotonNetwork.Destroy(objPhotonView.gameObject);
                     else
-                        Destroy(rb.gameObject); // fallback
+                        Destroy(rb.gameObject);
 
                     if (scoreManager != null)
+                    {
                         scoreManager.AddScore(1);
+                        Debug.Log("MagnetAttractor: Score increased by 1.");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("MagnetAttractor: scoreManager is null when trying to add score!");
+                    }
 
                     PlayTickSound();
                 }
@@ -119,12 +145,11 @@ public class MagnetAttractor : MonoBehaviourPun
             audioSource.PlayOneShot(tickSound);
     }
 
-    // Call this from PowerUp
     public void BoostMagnetForce(float multiplier, float duration)
     {
         if (!photonView.IsMine) return;
 
-        StopAllCoroutines(); // safeguard
+        StopAllCoroutines();
         attractionForce = originalAttractionForce * multiplier;
         boostTimeRemaining = duration;
         boostActive = true;
@@ -133,4 +158,5 @@ public class MagnetAttractor : MonoBehaviourPun
             boostText.text = "Boost: " + Mathf.CeilToInt(boostTimeRemaining) + "s";
     }
 }
+
 
