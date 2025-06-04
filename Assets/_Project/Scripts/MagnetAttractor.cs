@@ -47,11 +47,11 @@ public class MagnetAttractor : MonoBehaviourPun
 
         if (scoreManager == null)
         {
-            scoreManager = FindFirstObjectByType<ScoreManager>();
+            scoreManager = FindAnyObjectByType<ScoreManager>();
             if (scoreManager == null)
                 Debug.LogWarning("MagnetAttractor: Still couldn't find ScoreManager in scene.");
             else
-                Debug.Log("MagnetAttractor: ScoreManager found via FindObjectOfType.");
+                Debug.Log("MagnetAttractor: ScoreManager found via FindAnyObjectByType.");
         }
     }
 

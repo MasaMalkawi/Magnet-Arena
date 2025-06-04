@@ -13,23 +13,22 @@ public class PlayerSetup : MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
+            // 🔹 توليد اسم عشوائي وتخزينه
             string playerName = "Player " + Random.Range(1000, 9999);
             PhotonNetwork.NickName = playerName;
             nameTag.text = playerName;
 
+            // 🔹 لون مميز
             Color randomColor = new Color(Random.value, Random.value, Random.value);
             bodyRenderer.material.color = randomColor;
 
-            Camera[] allCameras = Object.FindObjectsByType<Camera>(FindObjectsSortMode.None);
-            foreach (Camera cam in allCameras)
-            {
-                if (cam.CompareTag("MainCamera"))
-                    cam.tag = "Untagged";
-            }
-
+            // 🔹 تفعيل الكاميرا
             cameraObject.SetActive(true);
-            cameraObject.tag = "MainCamera";
+            cameraObject.tag = "Untagged"; // تأكدي إنها مش MainCamera
 
+           
+
+            // 🔹 UI Canvas
             if (canvasObject != null)
             {
                 canvasObject.SetActive(true);
@@ -43,10 +42,11 @@ public class PlayerSetup : MonoBehaviourPun
         }
         else
         {
+            // 🔹 للاعبين الآخرين
             nameTag.text = photonView.Owner.NickName;
+
             cameraObject.SetActive(false);
             if (canvasObject != null) canvasObject.SetActive(false);
         }
     }
 }
-
