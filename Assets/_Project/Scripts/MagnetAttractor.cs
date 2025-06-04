@@ -158,5 +158,3 @@ public class MagnetAttractor : MonoBehaviourPun
             boostText.text = "Boost: " + Mathf.CeilToInt(boostTimeRemaining) + "s";
     }
 }
-
-

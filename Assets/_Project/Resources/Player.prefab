@@ -1027,10 +1027,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5284741d21e59847a9c48f2fc9cf981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodyRenderer: {fileID: 2476949729535902108}
-  nameTag: {fileID: 6631049066800085017}
   cameraObject: {fileID: 1771508410392551054}
   canvasObject: {fileID: 3711685284985466877}
+  bodyRenderer: {fileID: 2476949729535902108}
+  nameTag: {fileID: 6631049066800085017}
 --- !u!114 &4992944915192155037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1447,10 +1447,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5284741d21e59847a9c48f2fc9cf981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodyRenderer: {fileID: 2476949729535902108}
-  nameTag: {fileID: 6631049066800085017}
   cameraObject: {fileID: 1771508410392551054}
   canvasObject: {fileID: 3711685284985466877}
+  bodyRenderer: {fileID: 2476949729535902108}
+  nameTag: {fileID: 6631049066800085017}
 --- !u!1 &9131074751471511149
 GameObject:
   m_ObjectHideFlags: 0
