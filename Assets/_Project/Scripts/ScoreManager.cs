@@ -9,46 +9,46 @@ public class ScoreManager : MonoBehaviourPun
 
     void Start()
     {
+        // Only allow this script to run on the local player
         if (!photonView.IsMine)
         {
-            enabled = false;
+            enabled = false; // Disable the script if not the owner
             return;
         }
 
+        // If the score text reference is not assigned in the Inspector
         if (scoreText == null)
         {
-            
+            // Try to find the UI object named "ScoreText" in the scene
             GameObject scoreObj = GameObject.Find("ScoreText");
             if (scoreObj != null)
                 scoreText = scoreObj.GetComponent<TextMeshProUGUI>();
 
-            if (scoreText == null)
-                Debug.LogWarning("ScoreText component not assigned and not found in scene!");
         }
-
 
         UpdateScoreUI();
     }
 
+    // Add a value to the player's score
     public void AddScore(int value)
     {
         score += value;
-        
-        UpdateScoreUI();
+        UpdateScoreUI(); // Refresh the score UI
     }
 
+    // Reset the player's score to 0
     public void ResetScore()
     {
         score = 0;
-        UpdateScoreUI();
+        UpdateScoreUI(); // Refresh the score UI
     }
 
+    // Update the UI text with the current score
     void UpdateScoreUI()
     {
         if (scoreText != null)
         {
-            scoreText.text = "Score: " + score;
-            
+            scoreText.text = "Score: " + score; // Display the score
         }
         else
         {

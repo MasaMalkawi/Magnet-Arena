@@ -9,6 +9,7 @@ TagManager:
   - MagnetObject
   - Bullet
   - ScoreText
+  - Canvas
   layers:
   - Default
   - TransparentFX
